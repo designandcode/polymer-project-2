@@ -7,7 +7,7 @@
 <link rel="import" href="polymer-project-2-game.html">
 
 <dom-module id="polymer-project-2-app">
-	<template>
+  <template>
     <app-location
         route="{{route}}">
     </app-location>
@@ -34,10 +34,10 @@
       <polymer-project-2-home countries={{countries}} name="home"></polymer-project-2-home>
       <polymer-project-2-game countries={{countries}} name="game"></polymer-project-2-game>
     </iron-pages>
-	</template>
-	<script>
-		class PolymerProject2App extends Polymer.Element {
-			static get is() { return 'polymer-project-2-app'; }
+  </template>
+  <script>
+    class PolymerProject2App extends Polymer.Element {
+      static get is() { return 'polymer-project-2-app'; }
 
       static get properties() {
         return {
@@ -50,10 +50,10 @@
       _setFlagData(event) {
         this.countries = event.detail.response.countrycodes;
       }
-		}
+    }
 
-		window.customElements.define(PolymerProject2App.is, PolymerProject2App);
-	</script>
+    window.customElements.define(PolymerProject2App.is, PolymerProject2App);
+  </script>
 </dom-module>
 
 
