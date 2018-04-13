@@ -54,3 +54,5 @@ polymer-project-2-game
 
 ## View Live App Here
 https://polymer-project-2.firebaseapp.com/
+
+Based on: https://codelabs.developers.google.com/codelabs/whose-flag/index.html#0
