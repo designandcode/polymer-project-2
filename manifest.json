@@ -1,0 +1,7 @@
+{
+  "name": "polymer-project-2",
+  "short_name": "polymer-project-2",
+  "description": "Match flags to their countries!",
+  "start_url": "/",
+  "display": "standalone"
+}

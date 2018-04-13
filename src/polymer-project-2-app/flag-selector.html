@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<dom-module id="flag-selector">
+<template>
+	<style>
+      #flag-image-container {
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      #flag-image {
+        width: 100%;
+        padding-top: 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid #666;
+        opacity: 0;
+      }
+
+      #flag-image.active {
+        opacity: 1;
+        transition: opacity 1s;
+      }
+	</style>
+
+			<div id="flag-image-container">
+				<div id="flag-image"></div>
+			</div>	
+</template>
+<script>
+class flagSelector extends Polymer.Element {
+static get is() { return 'flag-selector'; }
+			static get properties() {
+				return {
+					country: {
+						type: Object,
+            observer: '_getFlag'
+					}
+				}
+			}
+
+			_getFlag(previousVal, currentVal) {
+	
+				let flag = this.country;
+
+        // Set the flag image
+        // Polyfill for this.root.document.querySelector where this.root === window.window
+        if (!this.flag) {
+          this.flag = Polymer.dom(this.root).querySelector('#flag-image');
+        }
+
+        this.flag.classList.remove('active');
+        this.flag.style.backgroundImage = `url('data/svg/${flag.code}.svg')`;
+
+        setTimeout(function() {
+          this.flag.classList.add('active');
+        }.bind(this), 10);
+			}
+}
+window.customElements.define(flagSelector.is, flagSelector);
+</script>
+</dom-module>

@@ -1,0 +1,59 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="polymer-project-2-home.html">
+<link rel="import" href="polymer-project-2-game.html">
+
+<dom-module id="polymer-project-2-app">
+	<template>
+    <app-location
+        route="{{route}}">
+    </app-location>
+
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}">
+    </app-route>
+
+    <iron-ajax
+      auto
+      url="../../data/countrycodes.json"
+      handle-as="json"
+      on-response='_setFlagData'>
+    </iron-ajax>
+
+    <iron-pages
+        selected="[[routeData.page]]"
+        attr-for-selected="name"
+        fallback-selection="home"
+        role="main">
+      <polymer-project-2-home countries={{countries}} name="home"></polymer-project-2-home>
+      <polymer-project-2-game countries={{countries}} name="game"></polymer-project-2-game>
+    </iron-pages>
+	</template>
+	<script>
+		class PolymerProject2App extends Polymer.Element {
+			static get is() { return 'polymer-project-2-app'; }
+
+      static get properties() {
+        return {
+          countries: {
+            type: Object
+          }
+        }
+      }
+
+      _setFlagData(event) {
+        this.countries = event.detail.response.countrycodes;
+      }
+		}
+
+		window.customElements.define(PolymerProject2App.is, PolymerProject2App);
+	</script>
+</dom-module>
+
+

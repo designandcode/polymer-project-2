@@ -1,0 +1,96 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="flag-rotator.html">
+
+
+<dom-module id="polymer-project-2-home">
+	<template>
+		<style>
+			:host {
+				width: 50%;
+				max-width: 800px;
+				margin: 0 auto;
+				text-align: center;
+        display: block;
+        font-family: Roboto, Noto, sans-serif;
+			}
+
+      paper-button {
+        color: white;
+        background: var(--paper-blue-500);
+        width: 192px;
+				margin: 0 auto;
+				padding: 0;
+      }
+
+      paper-button:hover {
+        background: var(--paper-light-blue-500);
+      }
+
+			paper-button a {
+				color: white;
+				text-decoration: none;
+				display: inline-block;
+				width: 100%;
+				padding: 0.7em 0.57em;
+			}
+
+			img {
+				width: 70%;
+				max-width: 320px;
+				vertical-align: middle;
+			}
+
+			h1 {
+				
+			}
+		</style>
+
+		<div id="home">
+			<h1>Guess the Country Flag!</h1>
+			<p>A <img src="data/png/polymerjs-logo.png" /> App</p>
+      <paper-button id="optionA" class="answer" on-click="_stopFlagImage"><a href="/game">Play Game!</a></paper-button>
+			<flag-rotator rotate={{flagRotate}} countries={{countryList}}></flag-rotator>
+		</div>
+	</template>
+	<script>
+		class PolymerProject2Home extends Polymer.Element {
+			static get is() { return 'polymer-project-2-home'; }
+
+			static get properties() {
+				return {
+					flagRotate: {
+						type: Boolean,
+						value: true
+					},
+					countries: {
+						type: Object,
+            // Observer method identified by name
+            observer: '_countriesUpdated'
+					},
+					countryList: {
+						type: Object
+					}
+				}
+			}
+
+			// Observer method defined as a class method
+  		_countriesUpdated(newValue, oldValue) {
+
+  		  // Pass countryList Object to the flag-rotator element
+				this.countryList = this.countries;
+  		}
+
+			_stopFlagImage(event) {
+				// No need to keep this running if we are not
+				// on this view anymore
+				this.flagRotate = false;
+			}
+
+		}
+
+		window.customElements.define(PolymerProject2Home.is, PolymerProject2Home);
+
+	</script>
+</dom-module>

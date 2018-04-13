@@ -1,0 +1,112 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<dom-module id="flag-rotator">
+<template>
+	<style>
+
+      #flag-image-container {
+        max-width: 600px;
+        width: 100%;
+        margin: 20px auto 0;
+      }
+
+      #flag-image {
+        width: 100%;
+        padding-top: 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid #666;
+				opacity: 0;
+      }
+
+			#flag-image.active {
+				opacity: 1;
+				transition: opacity 1s;
+			}
+	</style>
+
+			<div id="flag-image-container">
+				<div id="flag-image"></div>
+			</div>	
+</template>
+<script>
+class flagRotator extends Polymer.Element {
+static get is() { return 'flag-rotator'; }
+			static get properties() {
+				return {
+					countryList: {
+						type: Object
+					},
+					countries: {
+						type: Object,
+            // Observer method identified by name
+            observer: '_countriesUpdated'
+					},
+					flagRotateTick: {
+						type: Number,
+						value: 0
+					},
+					rotate: {
+						type: Boolean,
+						value: false,
+        		reflectToAttribute: true
+					}
+				}
+			}
+
+			static set flag(node) {
+				this.flag = Polymer.dom(this.root).querySelector('#flag-image');
+			}
+
+			_countriesUpdated(newValue, oldValue) {
+
+					this.countryList = this.countries;
+					this.rotate ? this._flagTimer() : this._updateFlagImage();
+			}
+
+			_updateFlagImage() {
+
+        let len = this.countryList.length;
+        let rand = this.__getRandomElementFromObject(len);
+				let country = this.countryList[rand];
+
+        // Set the flag image
+        // Polyfill for this.root.document.querySelector where this.root === window.window
+				if (!this.flag) {
+					this.flag = Polymer.dom(this.root).querySelector('#flag-image');
+				}
+
+				this.flag.classList.remove('active');
+        this.flag.style.backgroundImage = `url('../../data/svg/${country.code}.svg')`;
+				
+				setTimeout(function() {
+					this.flag.classList.add('active');
+				}.bind(this), 10);
+			}
+
+			_flagTimer() {
+
+				this._updateFlagImage();
+
+				this.rotateHomeFlag = setInterval(function() {
+
+					if (!this.rotate) {
+						clearInterval(this.rotateHomeFlag);
+					}
+
+					if (this.flagRotateTick < 10) {
+						this._updateFlagImage();
+						this.flagRotateTick++;
+					} else {
+						clearInterval(this.rotateHomeFlag);
+					}
+				}.bind(this), 5000);
+			}
+
+      __getRandomElementFromObject(length) {
+        return Math.floor(Math.random() * (length));
+      }
+}
+window.customElements.define(flagRotator.is, flagRotator);
+</script>
+</dom-module>

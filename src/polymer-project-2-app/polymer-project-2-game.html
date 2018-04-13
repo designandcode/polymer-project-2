@@ -1,0 +1,179 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="flag-selector.html">
+
+<dom-module id="polymer-project-2-game">
+  <template>
+    <style>
+      /* Parent Element styles */
+      :host {
+        display: block;
+        font-family: Roboto, Noto, sans-serif;
+      }
+
+      paper-button {
+        color: white;
+      }
+
+      paper-button.another {
+        background: var(--paper-blue-500);
+        width: 100%;
+      }
+
+      paper-button.another:hover {
+        background: var(--paper-light-blue-500);
+      }
+
+      paper-button.answer {
+        background: var(--paper-purple-500);
+        flex-grow: 1;
+      }
+
+      paper-button.answer:hover {
+        background: var(--paper-pink-500);
+      }
+
+      app-toolbar {
+        background-color: var(--paper-blue-500);
+        color: white;
+        margin: 20px 0;
+      }
+
+      iron-image {
+        border: solid;
+        width: 100%;
+        --iron-image-width: 100%;
+         background-color: white;
+      }
+
+      #answer-button-container {
+        display: flex; /* or inline-flex */
+        flex-flow: row wrap;
+        justify-content:space-around;
+        padding-top: 20px;
+      }
+
+      #answer {
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+      }
+    </style>
+
+    
+
+    <app-header>
+      <app-toolbar>
+        <div main-title>Whose flag is this?</div>
+      </app-toolbar>
+    </app-header>
+
+    <flag-selector country="{{correctAnswer}}" ></flag-selector>
+
+    <div id="answer">
+      <div id="answer-button-container">
+        <paper-button on-click="_selectAnswer" id="optionA" class="answer">[[countryA.name]]</paper-button>
+        <paper-button on-click="_selectAnswer" id="optionB" class="answer">[[countryB.name]]</paper-button>
+      </div>
+      <p>[[outputMessage]]</p>
+      <paper-button class="another" id="another" on-click="_reloadGame">Another!</paper-button>
+    </div>  
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class PolymerProject2Game extends Polymer.Element {
+      static get is() { return 'polymer-project-2-game'; }
+
+      static get properties() {
+        return {
+          countryA: {
+            type: Object
+          },
+          countryB: {
+            type: Object
+          },
+          outputMessage: {
+            type: String,
+            value: ""
+          },
+          correctAnswer: {
+            type: Object
+          },
+          userAnswer: {
+            type: String
+          },
+          countryList: {
+            type: Object
+          },
+          countries: {
+            type: Object,
+            // Observer method identified by name
+            observer: '_countriesUpdated'
+          }
+        };
+      }
+
+      _selectAnswer(event) {
+        let clickedButton = event.target;
+        this.userAnswer = clickedButton.textContent;
+        if (this.userAnswer == this.correctAnswer.name) {
+          this.outputMessage = `${this.userAnswer} is correct!`;
+        }
+        else {
+          this.outputMessage = `Nope! The correct answer is ${this.correctAnswer.name} !`;
+        }
+      }
+
+      _countriesUpdated(previousVal, currentVal) {
+
+        // Places the contents of country data file into countryList object
+        this.countryList = this.countries;
+
+        this._setGame();
+      }
+
+      _reloadGame(event) {
+        this._setGame();
+      }
+
+      _setGame() {
+
+        let len = this.countryList.length;
+        let randA = this.__getRandomElementFromObject(len);
+        let randB = this.__getRandomElementFromObject(len);
+        this._rand = this.__shuffle(randA, randB);
+
+        // Clear output message
+        this.outputMessage = "";
+        
+        // Choose values for the options the user can select from
+        this.countryA = this.countryList[randA];
+        this.countryB = this.countryList[randB];
+
+        // Set the correct answer
+        this.correctAnswer = this.countryList[this._rand];
+
+      }
+
+      __getRandomElementFromObject(length) {
+        return Math.floor(Math.random() * (length));
+      }
+
+      __shuffle(a, b) {
+        let arr = [a, b];
+        return arr[Math.round(Math.random() * (1))];
+      }
+    }
+
+    window.customElements.define(PolymerProject2Game.is, PolymerProject2Game);
+  </script>
+</dom-module>

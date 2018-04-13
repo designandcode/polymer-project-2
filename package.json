@@ -1,0 +1,21 @@
+{
+  "name": "polymer-project-2",
+  "version": "1.0.0",
+  "description": "Match flags to their countries (Google Code Lab)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "firebase-login": "firebase login",
+    "firebase-init": "firebase init",
+    "build": "polymer build",
+    "firebase-deploy": "polymer build && firebase deploy"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "firebase-tools": "^3.17.4"
+  }
+}
